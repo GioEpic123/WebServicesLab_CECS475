@@ -1,4 +1,5 @@
 ﻿// Invoking a web service asynchronously with class WebClient
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,113 +12,105 @@ using System.Xml.Linq;
 
 namespace FlickrViewer
 {
-   public partial class FlickrViewerForm : Form
-   {
-      // Use your Flickr API key here--you can get one at:
-      // http://www.flickr.com/services/apps/create/apply
-       private const string KEY = "f9fcedefed1c9bfa51b4d6d50bb8cd42";
+    public partial class FlickrViewerForm : Form
+    {
+        // Use your Flickr API key here--you can get one at:
+        // http://www.flickr.com/services/apps/create/apply
+        private const string KEY = "f9fcedefed1c9bfa51b4d6d50bb8cd42";
 
-      // object used to invoke Flickr web service
-      private WebClient flickrClient = new WebClient();
+        // object used to invoke Flickr web service
+        private WebClient flickrClient = new WebClient();
 
-      Task<string> flickrTask = null; // Task<string> that queries Flickr
+        Task<string> flickrTask = null; // Task<string> that queries Flickr
 
-      public FlickrViewerForm()
-      {
-         InitializeComponent();
-      }
+        public FlickrViewerForm()
+        {
+            InitializeComponent();
+        }
 
-      // initiate asynchronous Flickr search query; 
-      // display results when query completes
-      private async void searchButton_Click( object sender, EventArgs e )
-      {
-         // if flickrTask already running, prompt user 
-         if ( flickrTask != null && 
-            flickrTask.Status != TaskStatus.RanToCompletion )
-         {
-            var result = MessageBox.Show( 
-               "Cancel the current Flickr search?",
-               "Are you sure?", MessageBoxButtons.YesNo, 
-               MessageBoxIcon.Question );
-
-            // determine whether user wants to cancel prior search
-            if ( result == DialogResult.No ) return; 
-            flickrClient.CancelAsync();
-         } 
-
-         // Flickr's web service URL for searches
-         var flickrURL = string.Format( "https://api.flickr.com/services" +
-            "/rest/?method=flickr.photos.search&api_key={0}&tags={1}" +
-            "&tag_mode=all&per_page=500&privacy_filter=1", KEY,
-            inputTextBox.Text.Replace( " ", "," ) );
-
-         imagesListBox.DataSource = null; // remove prior data source
-         imagesListBox.Items.Clear(); // clear imagesListBox
-         pictureBox.Image = null; // clear pictureBox
-         imagesListBox.Items.Add( "Loading..." ); // display Loading...
-
-         try
-         {
-            // invoke Flickr web service to search Flick with user's tags
-            flickrTask = 
-               flickrClient.DownloadStringTaskAsync( "_____________________" ); // TODO
-
-            // await flickrTask then parse results with XDocument and LINQ
-            XDocument flickrXML = XDocument.Parse( "" ); // TODO use await
-
-            // gather information on all photos
-            var flickrPhotos =
-               from photo in flickrXML.Descendants( "photo" )
-               let id = photo.Attribute( "___________" ).Value
-               let title = photo.Attribute( "_______" ).Value
-               let secret = photo.Attribute( "secret" ).Value
-               let server = photo.Attribute( "server" ).Value
-               let farm = photo.Attribute( "farm" ).Value
-               select new FlickrResult
-               {
-                  Title = title,
-                  URL = string.Format(
-                     "http://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg",
-                     farm, "_________", id, secret ) // TODO
-               };
-            imagesListBox.Items.Clear();
-            // set ListBox properties only if results were found
-            if ( flickrPhotos.Any() )
+        // initiate asynchronous Flickr search query; 
+        // display results when query completes
+        private async void searchButton_Click(object sender, EventArgs e)
+        {
+            // if flickrTask already running, prompt user 
+            if (flickrTask != null &&
+                flickrTask.Status != TaskStatus.RanToCompletion)
             {
-               imagesListBox.DataSource = new List<string>().ToList(); // TODO
-               imagesListBox.DisplayMember = "Title";
+                var result = MessageBox.Show(
+                    "Cancel the current Flickr search?",
+                    "Are you sure?", MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question);
+
+                // determine whether user wants to cancel prior search
+                if (result == DialogResult.No) return;
+                flickrClient.CancelAsync();
             }
-            else imagesListBox.Items.Add( "No matches" );
-         }
-         catch ( WebException ) 
-         {
-            if ( flickrTask.Status == TaskStatus.Faulted )
-               MessageBox.Show( "Unable to get results from Flickr",
-                  "Flickr Error", MessageBoxButtons.OK, 
-                  MessageBoxIcon.Error );
+
+            // Flickr's web service URL for searches
+            var flickrURL = string.Format("https://api.flickr.com/services" +
+                                          "/rest/?method=flickr.photos.search&api_key={0}&tags={1}" +
+                                          "&tag_mode=all&per_page=500&privacy_filter=1", KEY, inputTextBox.Text.Replace(" ", ","));
+
+            imagesListBox.DataSource = null; // remove prior data source
             imagesListBox.Items.Clear(); // clear imagesListBox
-            imagesListBox.Items.Add( "Error occurred" );
-         }
-      }
+            pictureBox.Image = null; // clear pictureBox
+            imagesListBox.Items.Add("Loading..."); // display Loading...
 
-      // display selected image
-      private async void imagesListBox_SelectedIndexChanged(
-         object sender, EventArgs e )
-      {
-         if ( imagesListBox.SelectedItem != null )
-         {
-            string selectedURL =
-               ( ( FlickrResult ) imagesListBox.SelectedItem ).URL; 
+            try
+            {
+                // invoke Flickr web service to search Flick with user's tags
+                flickrTask =
+                    flickrClient.DownloadStringTaskAsync("_____________________"); // TODO
 
-            // use WebClient to get selected image's bytes asynchronously
-            WebClient imageClient = new WebClient();
-            byte[] imageBytes = await imageClient.DownloadDataTaskAsync( 
-               "__________________" ); // TODO
+                // await flickrTask then parse results with XDocument and LINQ
+                XDocument flickrXML = XDocument.Parse(""); // TODO use await
 
-            // display downloaded image in pictureBox
-            MemoryStream memoryStream = new MemoryStream( imageBytes );
-            pictureBox.Image = Image.FromStream( memoryStream );
-         }
-      }
-   }
+                // gather information on all photos
+                var flickrPhotos =
+                    from photo in flickrXML.Descendants("photo")
+                    let id = photo.Attribute("___________").Value
+                    let title = photo.Attribute("_______").Value
+                    let secret = photo.Attribute("secret").Value
+                    let server = photo.Attribute("server").Value
+                    let farm = photo.Attribute("farm").Value
+                    select new FlickrResult
+                    {
+                        Title = title,
+                        URL = string.Format("http://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg", farm, "_________", id, secret) // TODO
+                    };
+                imagesListBox.Items.Clear();
+                // set ListBox properties only if results were found
+                if (flickrPhotos.Any())
+                {
+                    imagesListBox.DataSource = new List<string>().ToList(); // TODO
+                    imagesListBox.DisplayMember = "Title";
+                }
+                else imagesListBox.Items.Add("No matches");
+            }
+            catch (WebException)
+            {
+                if (flickrTask.Status == TaskStatus.Faulted)
+                    MessageBox.Show("Unable to get results from Flickr", "Flickr Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                imagesListBox.Items.Clear();
+                imagesListBox.Items.Add("Error occurred");
+            }
+        }
+
+        // display selected image
+        private async void imagesListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (imagesListBox.SelectedItem != null)
+            {
+                string selectedURL = ((FlickrResult)imagesListBox.SelectedItem).URL;
+
+                // use WebClient to get selected image's bytes asynchronously
+                WebClient imageClient = new WebClient();
+                byte[] imageBytes = await imageClient.DownloadDataTaskAsync("__________________"); // TODO
+
+                // display downloaded image in pictureBox
+                MemoryStream memoryStream = new MemoryStream(imageBytes);
+                pictureBox.Image = Image.FromStream(memoryStream);
+            }
+        }
+    }
 }
