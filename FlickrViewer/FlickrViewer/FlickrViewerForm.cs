@@ -16,7 +16,7 @@ namespace FlickrViewer
     {
         // Use your Flickr API key here--you can get one at:
         // http://www.flickr.com/services/apps/create/apply
-        private const string Key = "f9fcedefed1c9bfa51b4d6d50bb8cd42";
+        private const string Key = "7459ad1cded2b09a6301b074454ad23b";
 
         private const string FlickrWebServiceUrlTemplate = "https://api.flickr.com/services" +
                                                            "/rest/?method=flickr.photos.search&api_key={0}&tags={1}" +
@@ -63,30 +63,29 @@ namespace FlickrViewer
             try
             {
                 // invoke Flickr web service to search Flick with user's tags
-                _flickrTask =
-                    _flickrClient.DownloadStringTaskAsync("_____________________"); // TODO
+                _flickrTask = _flickrClient.DownloadStringTaskAsync(flickrUrl);
 
                 // await flickrTask then parse results with XDocument and LINQ
-                XDocument flickrXml = XDocument.Parse(""); // TODO use await
+                XDocument flickrXml = XDocument.Parse( await _flickrTask);
 
                 // gather information on all photos
                 var flickrPhotos =
                     from photo in flickrXml.Descendants("photo")
-                    let id = photo.Attribute("___________").Value
-                    let title = photo.Attribute("_______").Value
+                    let id = photo.Attribute("id").Value
+                    let title = photo.Attribute("title").Value
                     let secret = photo.Attribute("secret").Value
                     let server = photo.Attribute("server").Value
                     let farm = photo.Attribute("farm").Value
                     select new FlickrResult
                     {
-                        Title = title,
-                        URL = string.Format(FlickrResultUrlTemplate, farm, "_________", id, secret) // TODO
+                        Url = string.Format(FlickrResultUrlTemplate, farm, server, id, secret)
                     };
                 imagesListBox.Items.Clear();
                 // set ListBox properties only if results were found
-                if (flickrPhotos.Any())
+                List<FlickrResult> flickrResults = flickrPhotos.ToList();
+                if (flickrResults.Any())
                 {
-                    imagesListBox.DataSource = new List<string>().ToList(); // TODO
+                    imagesListBox.DataSource = flickrResults;
                     imagesListBox.DisplayMember = "Title";
                 }
                 else imagesListBox.Items.Add("No matches");
@@ -105,11 +104,11 @@ namespace FlickrViewer
         {
             if (imagesListBox.SelectedItem != null)
             {
-                string selectedUrl = ((FlickrResult)imagesListBox.SelectedItem).URL;
+                string selectedUrl = ((FlickrResult)imagesListBox.SelectedItem).Url;
 
                 // use WebClient to get selected image's bytes asynchronously
                 WebClient imageClient = new WebClient();
-                byte[] imageBytes = await imageClient.DownloadDataTaskAsync("__________________"); // TODO
+                byte[] imageBytes = await imageClient.DownloadDataTaskAsync(selectedUrl);
 
                 // display downloaded image in pictureBox
                 MemoryStream memoryStream = new MemoryStream(imageBytes);
