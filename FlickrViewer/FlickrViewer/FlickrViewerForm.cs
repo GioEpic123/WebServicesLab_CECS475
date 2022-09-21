@@ -25,7 +25,7 @@ namespace FlickrViewer
       public FlickrViewerForm()
       {
          InitializeComponent();
-      } // end constructor
+      }
 
       // initiate asynchronous Flickr search query; 
       // display results when query completes
@@ -41,11 +41,9 @@ namespace FlickrViewer
                MessageBoxIcon.Question );
 
             // determine whether user wants to cancel prior search
-            if ( result == DialogResult.No )
-                return;
-            else
-                flickrClient.CancelAsync(); // cancel current search
-         } // end if
+            if ( result == DialogResult.No ) return; 
+            flickrClient.CancelAsync();
+         } 
 
          // Flickr's web service URL for searches
          var flickrURL = string.Format( "https://api.flickr.com/services" +
@@ -82,28 +80,25 @@ namespace FlickrViewer
                      "http://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg",
                      farm, "_________", id, secret ) // TODO
                };
-            imagesListBox.Items.Clear(); // clear imagesListBox
+            imagesListBox.Items.Clear();
             // set ListBox properties only if results were found
             if ( flickrPhotos.Any() )
             {
                imagesListBox.DataSource = new List<string>().ToList(); // TODO
-               
                imagesListBox.DisplayMember = "Title";
-            } // end if 
-            else // no matches were found
-               imagesListBox.Items.Add( "No matches" );
-         } // end try
+            }
+            else imagesListBox.Items.Add( "No matches" );
+         }
          catch ( WebException ) 
          {
-            // check whether Task failed
             if ( flickrTask.Status == TaskStatus.Faulted )
                MessageBox.Show( "Unable to get results from Flickr",
                   "Flickr Error", MessageBoxButtons.OK, 
                   MessageBoxIcon.Error );
             imagesListBox.Items.Clear(); // clear imagesListBox
             imagesListBox.Items.Add( "Error occurred" );
-         } // end catch
-      } // end method searchButton_Click
+         }
+      }
 
       // display selected image
       private async void imagesListBox_SelectedIndexChanged(
@@ -122,8 +117,7 @@ namespace FlickrViewer
             // display downloaded image in pictureBox
             MemoryStream memoryStream = new MemoryStream( imageBytes );
             pictureBox.Image = Image.FromStream( memoryStream );
-         } // end if
-      } // end method imagesListBox_SelectedIndexChanged
-   } // end class FlickrViewerForm
-} // end namespace FlickrViewer
-
+         }
+      }
+   }
+}
