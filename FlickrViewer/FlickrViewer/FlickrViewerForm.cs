@@ -16,12 +16,18 @@ namespace FlickrViewer
     {
         // Use your Flickr API key here--you can get one at:
         // http://www.flickr.com/services/apps/create/apply
-        private const string KEY = "f9fcedefed1c9bfa51b4d6d50bb8cd42";
+        private const string Key = "f9fcedefed1c9bfa51b4d6d50bb8cd42";
+
+        private const string FlickrWebServiceUrlTemplate = "https://api.flickr.com/services" +
+                                                           "/rest/?method=flickr.photos.search&api_key={0}&tags={1}" +
+                                                           "&tag_mode=all&per_page=500&privacy_filter=1";
+
+        private const string FlickrResultUrlTemplate = "http://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg";
 
         // object used to invoke Flickr web service
-        private WebClient flickrClient = new WebClient();
+        private readonly WebClient _flickrClient = new WebClient();
 
-        Task<string> flickrTask = null; // Task<string> that queries Flickr
+        private Task<string> _flickrTask = null; // Task<string> that queries Flickr
 
         public FlickrViewerForm()
         {
@@ -33,8 +39,8 @@ namespace FlickrViewer
         private async void searchButton_Click(object sender, EventArgs e)
         {
             // if flickrTask already running, prompt user 
-            if (flickrTask != null &&
-                flickrTask.Status != TaskStatus.RanToCompletion)
+            if (_flickrTask != null &&
+                _flickrTask.Status != TaskStatus.RanToCompletion)
             {
                 var result = MessageBox.Show(
                     "Cancel the current Flickr search?",
@@ -43,13 +49,11 @@ namespace FlickrViewer
 
                 // determine whether user wants to cancel prior search
                 if (result == DialogResult.No) return;
-                flickrClient.CancelAsync();
+                _flickrClient.CancelAsync();
             }
 
             // Flickr's web service URL for searches
-            var flickrURL = string.Format("https://api.flickr.com/services" +
-                                          "/rest/?method=flickr.photos.search&api_key={0}&tags={1}" +
-                                          "&tag_mode=all&per_page=500&privacy_filter=1", KEY, inputTextBox.Text.Replace(" ", ","));
+            var flickrUrl = string.Format(FlickrWebServiceUrlTemplate, Key, inputTextBox.Text.Replace(" ", ","));
 
             imagesListBox.DataSource = null; // remove prior data source
             imagesListBox.Items.Clear(); // clear imagesListBox
@@ -59,15 +63,15 @@ namespace FlickrViewer
             try
             {
                 // invoke Flickr web service to search Flick with user's tags
-                flickrTask =
-                    flickrClient.DownloadStringTaskAsync("_____________________"); // TODO
+                _flickrTask =
+                    _flickrClient.DownloadStringTaskAsync("_____________________"); // TODO
 
                 // await flickrTask then parse results with XDocument and LINQ
-                XDocument flickrXML = XDocument.Parse(""); // TODO use await
+                XDocument flickrXml = XDocument.Parse(""); // TODO use await
 
                 // gather information on all photos
                 var flickrPhotos =
-                    from photo in flickrXML.Descendants("photo")
+                    from photo in flickrXml.Descendants("photo")
                     let id = photo.Attribute("___________").Value
                     let title = photo.Attribute("_______").Value
                     let secret = photo.Attribute("secret").Value
@@ -76,7 +80,7 @@ namespace FlickrViewer
                     select new FlickrResult
                     {
                         Title = title,
-                        URL = string.Format("http://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg", farm, "_________", id, secret) // TODO
+                        URL = string.Format(FlickrResultUrlTemplate, farm, "_________", id, secret) // TODO
                     };
                 imagesListBox.Items.Clear();
                 // set ListBox properties only if results were found
@@ -89,7 +93,7 @@ namespace FlickrViewer
             }
             catch (WebException)
             {
-                if (flickrTask.Status == TaskStatus.Faulted)
+                if (_flickrTask != null && _flickrTask.Status == TaskStatus.Faulted)
                     MessageBox.Show("Unable to get results from Flickr", "Flickr Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 imagesListBox.Items.Clear();
                 imagesListBox.Items.Add("Error occurred");
@@ -101,7 +105,7 @@ namespace FlickrViewer
         {
             if (imagesListBox.SelectedItem != null)
             {
-                string selectedURL = ((FlickrResult)imagesListBox.SelectedItem).URL;
+                string selectedUrl = ((FlickrResult)imagesListBox.SelectedItem).URL;
 
                 // use WebClient to get selected image's bytes asynchronously
                 WebClient imageClient = new WebClient();
