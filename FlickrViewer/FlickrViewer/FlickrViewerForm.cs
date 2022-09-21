@@ -1,5 +1,6 @@
 ﻿// Invoking a web service asynchronously with class WebClient
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -61,10 +62,10 @@ namespace FlickrViewer
          {
             // invoke Flickr web service to search Flick with user's tags
             flickrTask = 
-               flickrClient.DownloadStringTaskAsync( _____________________ );
+               flickrClient.DownloadStringTaskAsync( "_____________________" ); // TODO
 
             // await flickrTask then parse results with XDocument and LINQ
-            XDocument flickrXML = XDocument.Parse( await ______________ );
+            XDocument flickrXML = XDocument.Parse( "" ); // TODO use await
 
             // gather information on all photos
             var flickrPhotos =
@@ -79,13 +80,14 @@ namespace FlickrViewer
                   Title = title,
                   URL = string.Format(
                      "http://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg",
-                     farm, _________, id, secret )
+                     farm, "_________", id, secret ) // TODO
                };
             imagesListBox.Items.Clear(); // clear imagesListBox
             // set ListBox properties only if results were found
             if ( flickrPhotos.Any() )
             {
-               imagesListBox.DataSource = __________________.ToList();
+               imagesListBox.DataSource = new List<string>().ToList(); // TODO
+               
                imagesListBox.DisplayMember = "Title";
             } // end if 
             else // no matches were found
@@ -115,7 +117,7 @@ namespace FlickrViewer
             // use WebClient to get selected image's bytes asynchronously
             WebClient imageClient = new WebClient();
             byte[] imageBytes = await imageClient.DownloadDataTaskAsync( 
-               __________________ );
+               "__________________" ); // TODO
 
             // display downloaded image in pictureBox
             MemoryStream memoryStream = new MemoryStream( imageBytes );
