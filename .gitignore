@@ -1,0 +1,8 @@
+﻿bin
+obj
+.vs
+.idea
+.DS_Store
+/FlickrViewer/FlickrViewer/obj/
+/FlickrViewer/FlickrViewer/bin/
+/FlickrViewer/FlickrViewer/.idea/
