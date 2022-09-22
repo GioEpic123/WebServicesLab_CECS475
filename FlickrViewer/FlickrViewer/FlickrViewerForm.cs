@@ -61,16 +61,16 @@ namespace FlickrViewer
          {
             // invoke Flickr web service to search Flick with user's tags
             flickrTask = 
-               flickrClient.DownloadStringTaskAsync( _____________________ );
+               flickrClient.DownloadStringTaskAsync( flickrURL );
 
             // await flickrTask then parse results with XDocument and LINQ
-            XDocument flickrXML = XDocument.Parse( await ______________ );
+            XDocument flickrXML = XDocument.Parse( await flickrTask );
 
             // gather information on all photos
             var flickrPhotos =
                from photo in flickrXML.Descendants( "photo" )
-               let id = photo.Attribute( "___________" ).Value
-               let title = photo.Attribute( "_______" ).Value
+               let id = photo.Attribute( "id" ).Value //not sure for id
+               let title = photo.Attribute( "title" ).Value //not sure for title
                let secret = photo.Attribute( "secret" ).Value
                let server = photo.Attribute( "server" ).Value
                let farm = photo.Attribute( "farm" ).Value
@@ -79,13 +79,13 @@ namespace FlickrViewer
                   Title = title,
                   URL = string.Format(
                      "http://farm{0}.staticflickr.com/{1}/{2}_{3}.jpg",
-                     farm, _________, id, secret )
+                     farm, title, id, secret ) //not sure for title
                };
             imagesListBox.Items.Clear(); // clear imagesListBox
             // set ListBox properties only if results were found
             if ( flickrPhotos.Any() )
             {
-               imagesListBox.DataSource = __________________.ToList();
+               imagesListBox.DataSource = flickrPhotos.ToList();
                imagesListBox.DisplayMember = "Title";
             } // end if 
             else // no matches were found
@@ -115,7 +115,7 @@ namespace FlickrViewer
             // use WebClient to get selected image's bytes asynchronously
             WebClient imageClient = new WebClient();
             byte[] imageBytes = await imageClient.DownloadDataTaskAsync( 
-               __________________ );
+               selectedURL );
 
             // display downloaded image in pictureBox
             MemoryStream memoryStream = new MemoryStream( imageBytes );

@@ -1,0 +1,33 @@
+﻿<Properties StartupConfiguration="{A8060012-E14D-4E12-808B-019DF2169F1C}|Default">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="FlickrViewer/FlickrViewerForm.cs">
+    <Files>
+      <File FileName="FlickrViewer/Program.cs" Line="1" Column="1" />
+      <File FileName="FlickrViewer/FlickrViewerForm.cs" Line="68" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="FlickrViewer" expanded="True">
+            <Node name="FlickrViewer" expanded="True">
+              <Node name="Properties" expanded="True">
+                <Node name="Resources.resx" expanded="True" />
+                <Node name="Settings.settings" expanded="True" />
+              </Node>
+              <Node name="FlickrViewerForm.cs" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.FlickrViewer PreferredExecutionTarget="MonoDevelop.Default" />
+  <MultiItemStartupConfigurations />
+</Properties>

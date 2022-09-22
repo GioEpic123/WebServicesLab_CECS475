@@ -1,0 +1,10 @@
+/Users/giovanniquevedo/Desktop/School/Frameworks 475/Lab2/WebServicesLab_CECS475/FlickrViewer/FlickrViewer/bin/Release/FlickrViewer.exe.config
+/Users/giovanniquevedo/Desktop/School/Frameworks 475/Lab2/WebServicesLab_CECS475/FlickrViewer/FlickrViewer/bin/Release/FlickrViewer.exe
+/Users/giovanniquevedo/Desktop/School/Frameworks 475/Lab2/WebServicesLab_CECS475/FlickrViewer/FlickrViewer/bin/Release/FlickrViewer.pdb
+/Users/giovanniquevedo/Desktop/School/Frameworks 475/Lab2/WebServicesLab_CECS475/FlickrViewer/FlickrViewer/obj/Release/FlickrViewer.csproj.AssemblyReference.cache
+/Users/giovanniquevedo/Desktop/School/Frameworks 475/Lab2/WebServicesLab_CECS475/FlickrViewer/FlickrViewer/obj/Release/FlickrViewer.FlickrViewerForm.resources
+/Users/giovanniquevedo/Desktop/School/Frameworks 475/Lab2/WebServicesLab_CECS475/FlickrViewer/FlickrViewer/obj/Release/FlickrViewer.Properties.Resources.resources
+/Users/giovanniquevedo/Desktop/School/Frameworks 475/Lab2/WebServicesLab_CECS475/FlickrViewer/FlickrViewer/obj/Release/FlickrViewer.csproj.GenerateResource.cache
+/Users/giovanniquevedo/Desktop/School/Frameworks 475/Lab2/WebServicesLab_CECS475/FlickrViewer/FlickrViewer/obj/Release/FlickrViewer.csproj.CoreCompileInputs.cache
+/Users/giovanniquevedo/Desktop/School/Frameworks 475/Lab2/WebServicesLab_CECS475/FlickrViewer/FlickrViewer/obj/Release/FlickrViewer.exe
+/Users/giovanniquevedo/Desktop/School/Frameworks 475/Lab2/WebServicesLab_CECS475/FlickrViewer/FlickrViewer/obj/Release/FlickrViewer.pdb
