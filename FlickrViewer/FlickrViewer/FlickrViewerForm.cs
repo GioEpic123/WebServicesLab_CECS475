@@ -88,7 +88,7 @@ namespace FlickrViewer
                 }
                 else
                     imagesListBox.Items.Add("No matches");
-            } // end try
+            }
             catch (WebException)
             {
                 // check whether Task failed
